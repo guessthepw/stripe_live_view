@@ -7,10 +7,17 @@ defmodule LiveViewStripe.Application do
 
   @impl true
   def start(_type, _args) do
+
     create_stripe_customer_service =
       if Mix.env() == :test,
         do: LiveviewStripe.Billing.CreateStripeCustomer.Stub,
         else: LiveviewStripe.Billing.CreateStripeCustomer
+
+    webhook_processor_service =
+      if Mix.env() == :test,
+        do: LiveViewStripe.Billing.ProcessWebhook.Stub,
+        else: LiveViewStripe.Billing.ProcessWebhook
+
     children = [
       # Start the Ecto repository
       LiveViewStripe.Repo,
@@ -24,6 +31,8 @@ defmodule LiveViewStripe.Application do
       # {LiveViewStripe.Worker, arg}
       # Create Stripe Customer servce
       create_stripe_customer_service,
+      # Webhook Processor service
+      webhook_processor_service
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
