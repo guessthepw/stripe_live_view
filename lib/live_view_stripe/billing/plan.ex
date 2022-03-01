@@ -3,10 +3,13 @@ defmodule LiveViewStripe.Billing.Plan do
   import Ecto.Changeset
 
   schema "billing_plans" do
-    field :amount, :integer
-    field :stripe_id, :string
-    field :stripe_plan_name, :string
-    belongs_to :product, LiveviewStripe.Billing.Product, foreign_key: :billing_product_id
+    field(:amount, :integer)
+    field(:stripe_id, :string)
+    field(:stripe_plan_name, :string)
+
+    belongs_to(:product, LiveViewStripe.Billing.Product, foreign_key: :billing_product_id)
+    has_many(:subscriptions, LiveViewStripe.Billing.Subscription)
+
     timestamps()
   end
 

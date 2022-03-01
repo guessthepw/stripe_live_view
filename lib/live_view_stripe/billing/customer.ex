@@ -3,8 +3,10 @@ defmodule LiveViewStripe.Billing.Customer do
   import Ecto.Changeset
 
   schema "billing_customers" do
+    field(:stripe_id, :string)
 
-    field :user_id, :id
+    belongs_to(:user, LiveViewStripe.Accounts.User)
+    has_many(:subscriptions, LiveViewStripe.Billing.Subscription)
 
     timestamps()
   end
@@ -12,7 +14,8 @@ defmodule LiveViewStripe.Billing.Customer do
   @doc false
   def changeset(customer, attrs) do
     customer
-    |> cast(attrs, [])
+    |> cast(attrs, [:stripe_id])
     |> validate_required([])
+    |> unique_constraint(:stripe_id, name: :billing_customers_stripe_id_index)
   end
 end

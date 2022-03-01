@@ -48,4 +48,21 @@ defmodule LiveViewStripe.BillingFixtures do
 
     customer
   end
+
+  @doc """
+  Generate a subscription.
+  """
+  def subscription_fixture(attrs \\ %{}) do
+    {:ok, subscription} =
+      attrs
+      |> Enum.into(%{
+        cancel_at: ~N[2022-02-28 00:19:00],
+        current_period_end_at: ~N[2022-02-28 00:19:00],
+        status: "some status",
+        stripe_id: "some stripe_id"
+      })
+      |> LiveViewStripe.Billing.create_subscription()
+
+    subscription
+  end
 end
