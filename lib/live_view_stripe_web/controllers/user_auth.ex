@@ -3,6 +3,7 @@ defmodule LiveViewStripeWeb.UserAuth do
   import Phoenix.Controller
 
   alias LiveViewStripe.Accounts
+  alias LiveViewStripe.Billing.Subscriptions
   alias LiveViewStripeWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
@@ -146,4 +147,38 @@ defmodule LiveViewStripeWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"
+
+  def put_session_layout(conn, _opts) do
+    conn
+    |> put_layout(false)
+    |> put_root_layout({LiveViewStripeWeb.LayoutView, :session})
+  end
+
+  @doc """
+  Used for routes that require the user to to have an active subscription.
+
+  Note that this first looks for a current_user. If current_user is not
+  found, it just returns conn and expects require_authenticated_user/2
+  to handle it.This checks for a subscription on every request but the
+  result could be stored a cookie.
+  """
+  def require_active_subscription(conn, _opts) do
+    case conn.assigns[:current_user] do
+      %{id: user_id} ->
+        Subscriptions.get_active_subscription_for_user(user_id)
+        |> handle_inactive_subscription(conn)
+      _ ->
+        conn
+    end
+  end
+
+  defp handle_inactive_subscription(%LiveViewStripe.Billing.Subscription{}, conn), do: conn
+
+  defp handle_inactive_subscription(_, conn) do
+    conn
+    |> put_flash(:error, "You need an active subscription")
+    |> maybe_store_return_to()
+    |> redirect(to: Routes.subscription_new_path(conn, :new))
+    |> halt()
+  end
 end

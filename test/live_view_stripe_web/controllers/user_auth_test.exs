@@ -3,7 +3,10 @@ defmodule LiveViewStripeWeb.UserAuthTest do
 
   alias LiveViewStripe.Accounts
   alias LiveViewStripeWeb.UserAuth
+
+  import LiveViewStripe.BillingFixtures
   import LiveViewStripe.AccountsFixtures
+  import LiveViewStripe.BillingFixtures
 
   @remember_me_cookie "_live_view_stripe_web_user_remember_me"
 
@@ -165,6 +168,30 @@ defmodule LiveViewStripeWeb.UserAuthTest do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
       refute conn.halted
       refute conn.status
+    end
+  end
+
+  describe "require_active_subscription/2" do
+    test "does nothing when user is not logged in", %{conn: conn, user: user} do
+      active_subscription_fixture(user)
+      conn = conn |> fetch_flash() |> UserAuth.require_active_subscription([])
+
+      refute conn.halted
+    end
+
+    test "does nothing when user logged in with active subscription", %{conn: conn, user: user} do
+      active_subscription_fixture(user)
+      conn = conn |> fetch_flash() |> assign(:current_user, user) |> UserAuth.require_active_subscription([])
+
+      refute conn.halted
+    end
+
+    test "halts and redirects when user logged in with inactive subscription", %{conn: conn, user: user} do
+      inactive_subscription_fixture(user)
+      conn = conn |> fetch_flash() |> assign(:current_user, user) |> UserAuth.require_active_subscription([])
+
+      assert conn.halted
+      assert redirected_to(conn) == "/subscriptions/new"
     end
   end
 end

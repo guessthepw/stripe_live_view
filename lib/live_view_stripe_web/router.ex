@@ -22,9 +22,14 @@ defmodule LiveViewStripeWeb.Router do
     post "/stripe", StripeWebhookController, :create
   end
 
-  scope "/", LiveviewStripeWeb.SubscribersLive do
+  scope "/", LiveViewStripeWeb.SubscribersLive do
     pipe_through [:browser, :require_active_subscription]
     live "/home", Home, :index
+  end
+
+  scope "/", LiveViewStripeWeb.SubscriptionLive do
+    pipe_through [:browser, :require_authenticated_user]
+    live "/subscriptions/new", New, :new
   end
 
   scope "/", LiveViewStripeWeb.PricingLive do
