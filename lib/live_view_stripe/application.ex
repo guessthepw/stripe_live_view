@@ -10,8 +10,8 @@ defmodule LiveViewStripe.Application do
 
     create_stripe_customer_service =
       if Mix.env() == :test,
-        do: LiveviewStripe.Billing.CreateStripeCustomer.Stub,
-        else: LiveviewStripe.Billing.CreateStripeCustomer
+        do: LiveViewStripe.Billing.CreateStripeCustomer.Stub,
+        else: LiveViewStripe.Billing.CreateStripeCustomer
 
     webhook_processor_service =
       if Mix.env() == :test,

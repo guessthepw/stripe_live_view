@@ -17,6 +17,11 @@ defmodule LiveViewStripeWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/webhooks", LiveViewStripeWeb do
+    pipe_through :api
+    post "/stripe", StripeWebhookController, :create
+  end
+
   scope "/", LiveViewStripeWeb do
     pipe_through :browser
 
