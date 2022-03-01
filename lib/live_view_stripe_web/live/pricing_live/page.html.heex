@@ -1,0 +1,35 @@
+<section class="container px-4 py-4 mx-auto">
+    <div class="w-full mx-auto text-center md:w-11/12 xl:w-8/12 bg-gray-100 p-5 mt-5 pt-8 pb-0">
+        <h1 class="mb-3 text-4xl font-bold leading-tight text-gray-900 md:text-5xl md:font-extrabold">Plans & Pricing</h1>
+        <div class="w-64 mx-auto mt-5 -mb-2">
+            <div class="flex justify-between p-2 text-center border border-red-200 rounded-full">
+                <button
+                    phx-click="set-interval"
+                    phx-value-interval="month"
+                    class={if @price_interval == "month", do: "w-full rounded-full btn bg-red-500 text-white p-2", else: "w-full rounded-full btn btn-link"}>
+                    Bill Monthly
+                </button>
+                <button
+                    phx-click="set-interval"
+                    phx-value-interval="year"
+                    class={if @price_interval == "year", do: "w-full rounded-full btn bg-red-500 text-white p-2", else: "w-full rounded-full btn btn-link"}>
+                    Bill Yearly
+                </button>
+            </div>
+        </div>
+
+         <section class="container px-4 py-12 mx-auto text-left md:text-center bg-white-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
+                <%= for product <- @products do %>
+                    <.live_component
+                        module={LiveProductComponent}
+                        product={product}
+                        price_interval={@price_interval}
+                        id={product.id}
+                        logged_in?={@logged_in?}
+                    />
+                <% end %>
+            </div>
+        </section>
+    </div>
+</section>

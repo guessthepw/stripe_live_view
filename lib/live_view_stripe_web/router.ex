@@ -22,10 +22,9 @@ defmodule LiveViewStripeWeb.Router do
     post "/stripe", StripeWebhookController, :create
   end
 
-  scope "/", LiveViewStripeWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
+  scope "/", LiveviewStripeWeb.PricingLive do
+    pipe_through [:browser]
+    live "/", Page, :index
   end
 
   # Other scopes may use custom stacks.
