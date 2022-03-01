@@ -18,4 +18,20 @@ defmodule LiveViewStripe.BillingFixtures do
 
     product
   end
+
+  @doc """
+  Generate a plan.
+  """
+  def plan_fixture(attrs \\ %{}) do
+    {:ok, plan} =
+      attrs
+      |> Enum.into(%{
+        amount: 42,
+        stripe_id: "some stripe_id",
+        stripe_plan_name: "some stripe_plan_name"
+      })
+      |> LiveViewStripe.Billing.create_plan()
+
+    plan
+  end
 end
