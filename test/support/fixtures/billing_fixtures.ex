@@ -34,4 +34,18 @@ defmodule LiveViewStripe.BillingFixtures do
 
     plan
   end
+
+  @doc """
+  Generate a customer.
+  """
+  def customer_fixture(attrs \\ %{}) do
+    {:ok, customer} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> LiveViewStripe.Billing.create_customer()
+
+    customer
+  end
 end

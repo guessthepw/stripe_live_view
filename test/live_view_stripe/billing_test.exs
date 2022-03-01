@@ -154,4 +154,58 @@ defmodule LiveViewStripe.BillingTest do
       {:ok, plan: plan, product: product}
     end
   end
+
+  describe "customers" do
+    alias LiveViewStripe.Billing.Customer
+
+    import LiveViewStripe.BillingFixtures
+
+    @invalid_attrs %{}
+
+    test "list_customers/0 returns all customers" do
+      customer = customer_fixture()
+      assert Billing.list_customers() == [customer]
+    end
+
+    test "get_customer!/1 returns the customer with given id" do
+      customer = customer_fixture()
+      assert Billing.get_customer!(customer.id) == customer
+    end
+
+    test "create_customer/1 with valid data creates a customer" do
+      valid_attrs = %{}
+
+      assert {:ok, %Customer{}} = Billing.create_customer(valid_attrs)
+    end
+
+    test "create_customer/1 with invalid data returns error changeset" do
+      Billing.create_customer(%{stripe_id: "123"})
+      assert {:error, %Ecto.Changeset{}} = Billing.create_customer(%{stripe_id: "123"})
+    end
+
+    test "update_customer/2 with valid data updates the customer" do
+      customer = customer_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Customer{}} = Billing.update_customer(customer, update_attrs)
+    end
+
+    test "update_customer/2 with invalid data returns error changeset" do
+      customer = customer_fixture()
+      Billing.create_customer(%{stripe_id: "123"})
+      assert {:error, %Ecto.Changeset{}} = Billing.update_customer(customer, %{stripe_id: "123"})
+      assert customer == Billing.get_customer!(customer.id)
+    end
+
+    test "delete_customer/1 deletes the customer" do
+      customer = customer_fixture()
+      assert {:ok, %Customer{}} = Billing.delete_customer(customer)
+      assert_raise Ecto.NoResultsError, fn -> Billing.get_customer!(customer.id) end
+    end
+
+    test "change_customer/1 returns a customer changeset" do
+      customer = customer_fixture()
+      assert %Ecto.Changeset{} = Billing.change_customer(customer)
+    end
+  end
 end
