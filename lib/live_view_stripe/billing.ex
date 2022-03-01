@@ -4,9 +4,22 @@ defmodule LiveViewStripe.Billing do
   """
 
   import Ecto.Query, warn: false
+
   alias LiveViewStripe.Repo
   alias Ecto
   alias LiveViewStripe.Billing.Product
+
+  @doc """
+  Gets a single product by stripe_id.
+  Raises `Ecto.NoResultsError` if the Product does not exist.
+  ## Examples
+      iex> get_product_by_stripe_id!("prod_IBuHQ")
+      %Product{}
+
+      iex> get_product!("prod_xxx")
+      ** (Ecto.NoResultsError)
+  """
+  def get_product_by_stripe_id!(stripe_id), do: Repo.get_by!(Product, stripe_id: stripe_id)
 
   @doc """
   Returns the list of products.

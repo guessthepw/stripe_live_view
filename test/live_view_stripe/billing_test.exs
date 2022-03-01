@@ -60,6 +60,12 @@ defmodule LiveViewStripe.BillingTest do
       assert %Ecto.Changeset{} = Billing.change_product(context.product)
     end
 
+    test "get_product_by_stripe_id!/1 returns the product with given stripe_id", context do
+      product = context.product
+
+      assert Billing.get_product_by_stripe_id!(product.stripe_id) == product
+    end
+
     def setup_product(attrs) do
       {:ok, product} =
         attrs
