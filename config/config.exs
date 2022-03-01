@@ -47,6 +47,15 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Stripe config
+config :stripity_stripe,
+  api_key: System.get_env("STRIPE_SECRET"),
+  webhook_signing_key: System.get_env("STRIPE_WEBHOOK_SIGNING_KEY"),
+  public_key: System.get_env("STRIPE_PUBLIC")
+
+config :live_view_stripe,
+  stripe_service: Stripe
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
