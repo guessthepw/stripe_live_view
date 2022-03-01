@@ -7,6 +7,10 @@ defmodule LiveViewStripe.Application do
 
   @impl true
   def start(_type, _args) do
+    create_stripe_customer_service =
+      if Mix.env() == :test,
+        do: LiveviewStripe.Billing.CreateStripeCustomer.Stub,
+        else: LiveviewStripe.Billing.CreateStripeCustomer
     children = [
       # Start the Ecto repository
       LiveViewStripe.Repo,
@@ -15,9 +19,11 @@ defmodule LiveViewStripe.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: LiveViewStripe.PubSub},
       # Start the Endpoint (http/https)
-      LiveViewStripeWeb.Endpoint
+      LiveViewStripeWeb.Endpoint,
       # Start a worker by calling: LiveViewStripe.Worker.start_link(arg)
       # {LiveViewStripe.Worker, arg}
+      # Create Stripe Customer servce
+      create_stripe_customer_service,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

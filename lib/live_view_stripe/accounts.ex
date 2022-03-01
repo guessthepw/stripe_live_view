@@ -8,6 +8,23 @@ defmodule LiveViewStripe.Accounts do
 
   alias LiveViewStripe.Accounts.{User, UserToken, UserNotifier}
 
+  @doc """
+  Notify subscribers to "user_created" that a user has been created and send it.
+  """
+  def notify_subscribers({:error, %Ecto.Changeset{}} = result), do: result
+
+  def notify_subscribers({:ok, user} = result) do
+    Phoenix.PubSub.broadcast(LiveViewStripe.PubSub, "user_created", %{user: user})
+    result
+  end
+
+  @doc """
+  Subscribe to further messages from "user_created".
+  """
+  def subscribe_on_user_created do
+    Phoenix.PubSub.subscribe(LiveViewStripe.PubSub, "user_created")
+  end
+
   ## Database getters
 
   @doc """
@@ -78,6 +95,7 @@ defmodule LiveViewStripe.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers()
   end
 
   @doc """

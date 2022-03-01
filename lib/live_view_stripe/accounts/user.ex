@@ -8,6 +8,8 @@ defmodule LiveViewStripe.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
+    has_one(:billing_customer, LiveViewStripe.Billing.Customer)
+
     timestamps()
   end
 

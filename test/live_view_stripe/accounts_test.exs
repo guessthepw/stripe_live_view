@@ -92,6 +92,15 @@ defmodule LiveViewStripe.AccountsTest do
       assert is_nil(user.confirmed_at)
       assert is_nil(user.password)
     end
+
+    test "when the user is created it creates a stripe_customer and billing_customer" do
+      Accounts.subscribe_on_user_created()
+
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert_received(%{user: ^user})
+    end
   end
 
   describe "change_user_registration/2" do
