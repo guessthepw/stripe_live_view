@@ -40,20 +40,6 @@ defmodule LiveViewStripeWeb.UserSessionControllerTest do
       assert response =~ "Log out</a>"
     end
 
-    test "logs the user in with remember me", %{conn: conn, user: user} do
-      conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{
-            "email" => user.email,
-            "password" => valid_user_password(),
-            "remember_me" => "true"
-          }
-        })
-
-      assert conn.resp_cookies["_liveview_stripe_web_user_remember_me"]
-      assert redirected_to(conn) == "/"
-    end
-
     test "logs the user in with return to", %{conn: conn, user: user} do
       conn =
         conn
