@@ -1,10 +1,8 @@
-<ul>
 <%= if @current_user do %>
-  <li><%= @current_user.email %></li>
-  <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-  <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-<% else %>
-  <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-  <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
+  <%= link "Pricing and Plans",
+        to: Routes.pricing_page_path(@conn, :index),
+        class: "text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
+  <%= link "Start A Subscription",
+        to: Routes.subscription_new_path(@conn, :new),
+        class: "text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
 <% end %>
-</ul>

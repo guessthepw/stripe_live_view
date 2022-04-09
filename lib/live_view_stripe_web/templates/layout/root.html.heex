@@ -5,26 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "LiveViewStripe", suffix: " · Phoenix Framework" %>
+    <%= live_title_tag assigns[:page_title] || "John Herbener", suffix: " · Phoenix Framework" %>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
-  <body>
+  <body class="bg-zinc-800">
     <header>
-      <section class="container">
-        <nav>
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
+      <nav class="flex items-center justify-between flex-wrap bg-zinc-900 p-6">
+        <div class="flex items-center flex-shrink-0 text-white mr-6">
+          <span class="font-semibold text-2xl tracking-tight pl-5 text-red-500">Payments</span>
+        </div>
+        <div class="block lg:hidden">
+          <button
+            class="flex items-center px-3 py-2 border rounded text-red-200 border-red-400 hover:text-white hover:border-white">
+            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <title>Menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+            </svg>
+          </button>
+        </div>
+        <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+          <div class="text-sm lg:flex-grow">
+            <%= render "_user_menu.html" , assigns %>
+          </div>
+          <div>
+            <%= if @current_user do %>
+            <%= link "User Settings", to: Routes.user_settings_path(@conn, :edit),
+                  class: "text-sm text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
+            <%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete,
+                  class: "text-sm text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
+            <a href="#" class="text-red-300 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4">
+              <%= @current_user.email %>
+            </a>
+            <% else %>
+              <%= link "Pricing and Plans", to: Routes.pricing_page_path(@conn, :index),
+                    class: "text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
+              <%= link "Register", to: Routes.user_registration_path(@conn, :new),
+                    class: "text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %>
+              <%= link "Log in", to: Routes.user_session_path(@conn, :new),
+                    class: "text-gray-400 block mt-4 lg:inline-block lg:mt-0 text-white-200 hover:text-white mr-4" %> %>
             <% end %>
-          </ul>
-          <%= render "_user_menu.html", assigns %>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src={Routes.static_path(@conn, "/images/phoenix.png")} alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
+          </div>
+        </div>
+      </nav>
     </header>
     <%= @inner_content %>
   </body>

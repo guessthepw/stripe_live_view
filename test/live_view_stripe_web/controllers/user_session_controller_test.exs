@@ -11,7 +11,7 @@ defmodule LiveViewStripeWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Login</h1>"
       assert response =~ "Register</a>"
       assert response =~ "Forgot your password?</a>"
     end
@@ -50,7 +50,7 @@ defmodule LiveViewStripeWeb.UserSessionControllerTest do
           }
         })
 
-      assert conn.resp_cookies["_live_view_stripe_web_user_remember_me"]
+      assert conn.resp_cookies["_liveview_stripe_web_user_remember_me"]
       assert redirected_to(conn) == "/"
     end
 
@@ -75,7 +75,7 @@ defmodule LiveViewStripeWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
+      assert response =~ "Login</h1>"
       assert response =~ "Invalid email or password"
     end
   end
