@@ -325,7 +325,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact 📩
 
-John Herbener - [herbener.cloud](https://herbener.cloud) - john@herbener.cloud |
+John Herbener - [herbener.net](https://herbener.net) - john@herbener.cloud |
 Project Link: [https://github.com/herbedev/live_view_stripe](https://github.com/herbedev/live_view_stripe)
+
+Loosely based off the tutorial from https://fullstackphoenix.com/
 
 <p align="right">(<a href="#top">back to top</a>)</p>
